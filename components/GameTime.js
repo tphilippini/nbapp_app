@@ -27,7 +27,6 @@ const styles = StyleSheet.create({
     minWidth: 60,
     alignItems: "center",
     justifyContent: "center",
-    // transition: "transform 0.3s ease-in-out",
   },
   time: {
     textTransform: "uppercase",

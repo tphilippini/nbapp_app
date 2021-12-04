@@ -1,98 +1,76 @@
-import React, { useState } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import React, { useState, useContext } from "react";
+import { StyleSheet, Text, View, TouchableOpacity, ImageBackground } from "react-native";
+import * as Animatable from "react-native-animatable";
+import { SvgUri, SvgCssUri } from "react-native-svg";
 
-import TeamInfo from './TeamInfo'
-import CardHeader from './CardHeader'
-import GameTime from './GameTime'
-import ScoreTable from './ScoreTable'
+// import { SharedElement } from "react-navigation-shared-element";
 
-const Card = (props) => {
-  let [cardOpen, toggleCardOpen] = useState(true);
-  let [homeSelected, toggleDivider] = useState(true);
+import { ThemeContext } from "../utils/theme";
 
-  const onCardClick = () => {
-    if (props.item.statusNum === 1) return;
-    if (!cardOpen) toggleDivider(true);
-    toggleCardOpen(!cardOpen);
-  };
+import TeamInfo from './TeamInfo';
+import CardHeader from './CardHeader';
+import GameTime from './GameTime';
+const DURATION = 400;
 
-  const handleToggleOnClick = () => {
-    toggleDivider(!homeSelected);
-  };
+const Card = ({ item }) => {
+  const { theme } = useContext(ThemeContext);
 
   return (
-    <TouchableOpacity style={styles.item} onPress={() => onCardClick()}>
-      <CardHeader statusNum={props.item.statusNum} />
+    <Animatable.View
+      animation='bounceIn'
+      delay={DURATION}
+      style={[styles.item, { backgroundColor: theme.backgroundCard }]}
+    >
+      <CardHeader statusNum={item.statusNum} />
+      {/* <SharedElement id={`item.${item.matchId}.card`}> */}
       <View style={styles.content}>
-        <TeamInfo
-          home
-          homeSelected={homeSelected}
-          toggleDivider={handleToggleOnClick}
-          cardOpen={cardOpen}
-          teamName={props.item.hTeam.teamShortName}
-          // teamNameStyle={teamNameStyle}
-          teamRecord={props.item.hTeamRecordFormatted}
-          // scoreStyle={scoreStyle}
-          teamScore={props.item.hTeamScore}
-        />
-        <View style={styles.center}>
-          <GameTime item={props.item} />
-          <ScoreTable
-            cardOpen={cardOpen}
-            homeScores={props.item.hTeamQScore}
-            awayScores={props.item.vTeamQScore}
+        <View>
+          {/* <SvgCssUri
+            width='50%'
+            height='50%'
+            fill='#000'
+            uri={`https://cdn.nba.com/logos/nba/${item.hTeam.teamId}/global/L/logo.svg`}
+            style={styles.hImage}
+          /> */}
+          <TeamInfo
+            home
+            teamName={item.hTeam.teamShortName}
+            teamRecord={item.hTeamRecordFormatted}
+            teamScore={item.hTeamScore}
           />
         </View>
-        <TeamInfo
-          home={false}
-          homeSelected={homeSelected}
-          toggleDivider={handleToggleOnClick}
-          cardOpen={cardOpen}
-          teamName={props.item.vTeam.teamShortName}
-          // teamNameStyle={teamNameStyle}
-          teamRecord={props.item.vTeamRecordFormatted}
-          // scoreStyle={scoreStyle}
-          teamScore={props.item.vTeamScore}
-        />
-      </View>
-
-      {cardOpen && (
-        <>
-          <View style={styles.divider}>
-            <TouchableOpacity
-              style={[
-                styles.dividerItem,
-                homeSelected ? styles.left : styles.right,
-              ]}
-              onPress={() => handleToggleOnClick()}
-            ></TouchableOpacity>
+        <View style={styles.center}>
+          <View style={styles.gameTime}>
+            {/* <SharedElement id={`item.${item.matchId}.gametime`}> */}
+            <GameTime item={item} />
+            {/* </SharedElement> */}
           </View>
-          {/* {props.statusNum === 3 && props.videos.length > 0 && (
-            <MatchHighlightsRail videos={props.videos} />
-          )}
-          {homeSelected && (
-            <PlayerStatsSection
-              stats={sortMatchStats(props.stats, props.hTeamId)}
-              videos={props.videos}
-            />
-          )}
-          {!homeSelected && (
-            <PlayerStatsSection
-              stats={sortMatchStats(props.stats, props.vTeamId)}
-              videos={props.videos}
-            />
-          )} */}
-        </>
-      )}
-    </TouchableOpacity>
+        </View>
+        <View>
+          {/* <SvgCssUri
+            width='100%'
+            height='100%'
+            fill='#000'
+            uri={`https://cdn.nba.com/logos/nba/${item.vTeam.teamId}/global/L/logo.svg`}
+            style={styles.vImage}
+          /> */}
+          <TeamInfo
+            home={false}
+            teamName={item.vTeam.teamShortName}
+            teamRecord={item.vTeamRecordFormatted}
+            teamScore={item.vTeamScore}
+          />
+        </View>
+      </View>
+      {/* </SharedElement> */}
+    </Animatable.View>
   );
-}
+};
 
 export default Card
 
 const styles = StyleSheet.create({
   item: {
-    backgroundColor: "#FFF",
     margin: 10,
     borderRadius: 10,
     minHeight: 120,
@@ -102,26 +80,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-around",
     paddingTop: 5,
+    position: 'relative',
+  },
+  hImage: {
+    // width: 50,
+    // height: 50,
+    position: "absolute",
+    left: 25,
+    top: -35,
+  },
+  vImage: {
+    // width: 50,
+    // height: 50,
+    position: "absolute",
+    right: 0,
+    top: 0,
   },
   center: {
     alignItems: "center",
     justifyContent: "center",
-  },
-  divider: {
-    width: "100%",
-    height: 4,
-    marginTop: 10,
-    backgroundColor: "#E8EAED",
-  },
-  dividerItem: {
-    height: 4,
-    width: "50%",
-    backgroundColor: "#5f45bb",
-  },
-  left: {
-    left: 0,
-  },
-  right: {
-    left: "50%",
   },
 });

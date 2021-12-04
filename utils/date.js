@@ -33,12 +33,19 @@ const formatTime = (
 };
 
 const getTodayDate = () => {
-  return dayjs().hour() < 17
+  return dayjs().hour() < 20
     ? dayjs().subtract(1, "d").format("YYYYMMDD")
     : dayjs().format("YYYYMMDD");
 };
 
+const getStringTodayDate = () => {
+  return dayjs().hour() < 20
+    ? dayjs().subtract(1, "d").format("DD MMM. YYYY")
+    : dayjs().format("DD MMM. YYYY");
+};
+
 module.exports = {
   getTodayDate,
+  getStringTodayDate,
   formatTime,
 };

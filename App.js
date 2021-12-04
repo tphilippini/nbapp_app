@@ -1,31 +1,42 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+// import { enableScreens } from 'react-native-screens';
+import { NavigationContainer } from "@react-navigation/native";
+import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
+import { ThemeProvider } from "./utils/theme";
 
-import List from './components/List';
+import Home from "./screens/Home";
+import Details from "./screens/Details";
+
+// enableScreens();
+const Stack = createSharedElementStackNavigator();
 
 export default function App() {
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar style='dark' />
-      <Text style={styles.title}>Résultats de la nuit</Text>
-      <List />
-    </SafeAreaView>
+    <ThemeProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName='Home' headerMode='none'>
+          <Stack.Screen name='Home' component={Home} />
+          <Stack.Screen
+            name='Details'
+            component={Details}
+            // options={() => ({
+            // gestureEnabled: false,
+            // transitionSpec: {
+            //   open: { animation: "timing", config: { duration: 200 }},
+            //   close: { animation: "timing", config: { duration: 200 }},
+            // },
+            // cardStyleInterpolator: ({current: { progress }}) => {
+            //   return {
+            //     cardStyle: {
+            //       opacity: progress,
+            //     },
+            //   }
+            // }
+            // })}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </ThemeProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#2C2839",
-    backgroundColor: "#E8EAED",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    // color: "#fff",
-    paddingTop: 30,
-    paddingHorizontal: 20,
-    marginBottom: 10,
-  },
-});

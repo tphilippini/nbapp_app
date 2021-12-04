@@ -4,13 +4,16 @@ import {
   StyleSheet,
   Text,
   View,
+  TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import Card from "./Card";
 import { getTodayDate } from '../utils/date'
 
 const List = () => {
+  const navigation = useNavigation();
   const [feeds, setFeeds] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -24,6 +27,10 @@ const List = () => {
           setLoading(false);
         }
       });
+
+    return () => {
+      setFeeds([]);
+    };
   }, []);
 
   return (
@@ -34,16 +41,27 @@ const List = () => {
         </View>
       ) : (
         <ScrollView
+          alwaysBounceVertical={true}
+          showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             flexGrow: 1,
           }}
         >
-          {/* <View> */}
           {feeds.length > 0 ? (
             <View style={styles.items}>
               {feeds.map((item, index) => {
-                return (
-                  <Card key={index}  item={item} />
+                return item.statusNum == 3 ? (
+                  <TouchableOpacity
+                    key={index}
+                    activeOpacity={0.8}
+                    onPress={() => {
+                      navigation.navigate("Details", { item });
+                    }}
+                  >
+                    <Card item={item} />
+                  </TouchableOpacity>
+                ) : (
+                  <Card key={index} item={item} />
                 );
               })}
             </View>
@@ -52,7 +70,6 @@ const List = () => {
               <Text style={styles.emptyTitle}>Aucun résultat cette nuit</Text>
             </View>
           )}
-          {/* </View> */}
         </ScrollView>
       )}
     </>
@@ -63,7 +80,7 @@ export default List;
 
 const styles = StyleSheet.create({
   items: {
-    paddingTop: 20,
+    // paddingTop: 20,
   },
   emptyList: {
     flex: 1,
