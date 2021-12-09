@@ -2,6 +2,8 @@
   "expo": {
     "name": "nbapp_app",
     "slug": "nbapp_app",
+    "description": "NBA Scoreboard Application",
+    "primaryColor": "#2C2839",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
