@@ -6,6 +6,7 @@ import * as Animatable from "react-native-animatable";
 
 import TeamInfo from "../components/TeamInfo";
 import CardHeader from "../components/CardHeader";
+import GameScore from "../components/GameScore";
 import GameTime from "../components/GameTime";
 import PlayerStats from '../components/PlayerStats';
 
@@ -30,7 +31,7 @@ const Details = ({ route, navigation }) => {
         style={{
           padding: 12,
           position: "absolute",
-          top: 50,
+          top: 40,
           left: 5,
           zIndex: 2,
         }}
@@ -45,18 +46,23 @@ const Details = ({ route, navigation }) => {
       >
         <TeamInfo
           home
-          teamName={item.hTeam.teamShortName}
+          teamId={item.hTeam.teamId}
+          teamName={item.hTeam.teamName}
+          teamShortName={item.hTeam.teamShortName}
           teamRecord={item.hTeamRecordFormatted}
           teamScore={item.hTeamScore}
         />
         <View>
           {/* <SharedElement id={`item.${item.matchId}.gametime`}> */}
+          <GameScore item={item} />
           <GameTime item={item} />
           {/* </SharedElement> */}
         </View>
         <TeamInfo
           home={false}
-          teamName={item.vTeam.teamShortName}
+          teamId={item.vTeam.teamId}
+          teamName={item.vTeam.teamName}
+          teamShortName={item.vTeam.teamShortName}
           teamRecord={item.vTeamRecordFormatted}
           teamScore={item.vTeamScore}
         />
